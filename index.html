@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Проверьте, как хорошо вы знаете 32 района Омской области.">
+  <title>Районы Омской области · Геопрактика</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="districts.js"></script>
+  <script defer src="quiz.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span>Геопрактика</div>
+      <span class="subject">География России</span>
+    </div>
+  </header>
+  <main>
+    <div class="intro">
+      <p class="category"><span></span> Омская область</p>
+      <h1>Районы на карте</h1>
+      <p class="description">Найдите все 32 района Омской области.</p>
+    </div>
+    <div class="workspace">
+      <section class="quiz" aria-labelledby="target">
+        <div class="question" aria-live="polite" aria-atomic="true">
+          <p id="prompt" class="prompt">Покажите на карте</p>
+          <h2 id="target">Загрузка карты…</h2>
+        </div>
+        <div id="feedback" role="status" class="feedback">Нажмите на нужный район.</div>
+        <div class="results">
+          <div class="result-head">
+            <label for="progress">Районы найдены</label>
+            <span class="count"><strong id="solved">0</strong><span> / </span><span id="total">32</span></span>
+          </div>
+          <progress id="progress" value="0" max="32"></progress>
+          <p class="mistakes">Ошибки <strong id="mistakes">0</strong></p>
+        </div>
+        <button id="restart" class="restart" type="button" disabled><span aria-hidden="true">↻</span> Начать заново</button>
+      </section>
+      <figure class="map-panel">
+        <div class="map-top">
+          <figcaption>Контурная карта</figcaption>
+          <div class="legend"><span><i class="swatch correct"></i> Найден</span><span><i class="swatch incorrect"></i> Ошибка</span></div>
+        </div>
+        <div class="map-frame">
+          <div class="north" aria-hidden="true">С<span></span></div>
+          <svg id="map" aria-label="Карта районов Омской области" role="group"></svg>
+          <div class="map-controls" aria-label="Масштаб карты">
+            <button type="button" id="zoom-in" aria-label="Приблизить">+</button>
+            <button type="button" id="zoom-out" aria-label="Отдалить" disabled>−</button>
+          </div>
+        </div>
+        <div class="map-bottom">
+          <span>Границы по карте 2012 года</span>
+          <span>Адаптация <a href="https://commons.wikimedia.org/wiki/File:Outline-Omskaya.svg">Nzeemin / OpenStreetMap</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a></span>
+        </div>
+      </figure>
+    </div>
+  </main>
+  <noscript><p class="no-script">Для работы тренажёра включите JavaScript в браузере.</p></noscript>
+</body>
+</html>
