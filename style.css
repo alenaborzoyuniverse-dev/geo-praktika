@@ -72,6 +72,7 @@ progress::-moz-progress-bar { background: var(--green); }
 .district:hover, .district:focus-visible { fill: #a9c6af; stroke: #243f34; stroke-width: 2; outline: none; }
 .district.found { fill: #78ad81; stroke: #315f45; cursor: default; }
 .district.missed { fill: #df8172; stroke: #a7392d; stroke-width: 1.7; }
+.district.revealed { fill: #78ad81; stroke: #255e40; stroke-width: 2.7; }
 .city { fill: #f7f5ee; stroke: #678071; stroke-width: 1; vector-effect: non-scaling-stroke; }
 .north, .map-controls { position: absolute; z-index: 1; }
 .north { inset: 16px auto auto 17px; display: grid; justify-items: center; gap: 3px; font: 700 .8rem Georgia, serif; pointer-events: none; }

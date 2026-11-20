@@ -62,12 +62,20 @@ function initialize(data) {
     mistakes.textContent = errors;
     queue.push(next);
     path.classList.add("missed");
-    setFeedback(queue.length === 1 ? "Неверно. Попробуйте ещё раз." : "Неверно. Этот район появится снова.", "wrong");
+    setFeedback("Неверно. Смотрите на карту.", "wrong");
     errorTimer = window.setTimeout(() => {
       path.classList.remove("missed");
-      errorTimer = null;
-      showQuestion();
-    }, 760);
+      const correctPath = paths.get(next);
+      showDistrict(correctPath);
+      correctPath.classList.add("revealed");
+      setFeedback("Правильный район подсвечен.", "right");
+      errorTimer = window.setTimeout(() => {
+        correctPath.classList.remove("revealed");
+        errorTimer = null;
+        showQuestion();
+        setFeedback(queue.length === 1 ? "Попробуйте ещё раз." : "Нажмите на нужный район.");
+      }, 1150);
+    }, 400);
   }
 
   for (const [index, district] of data.districts.entries()) {
@@ -99,7 +107,7 @@ function initialize(data) {
     map.append(city);
   }
 
-  const resetView = enableZoom(data.viewBox);
+  const { resetView, showDistrict } = enableZoom(data.viewBox);
   function start() {
     window.clearTimeout(errorTimer);
     errorTimer = null;
@@ -111,7 +119,7 @@ function initialize(data) {
       [queue[index], queue[other]] = [queue[other], queue[index]];
     }
     for (const [index, path] of [...paths.values()].entries()) {
-      path.classList.remove("found", "missed");
+      path.classList.remove("found", "missed", "revealed");
       path.removeAttribute("aria-disabled");
       path.setAttribute("aria-label", "Участок карты " + (index + 1));
     }
@@ -182,10 +190,28 @@ function enableZoom([left, top, width, height]) {
     render();
   });
 
-  return () => {
+  function resetView() {
     level = 0;
     centerX = left + width / 2;
     centerY = top + height / 2;
     render();
-  };
+  }
+
+  function showDistrict(path) {
+    if (level === 0) return;
+    const bounds = path.getBBox();
+    const view = map.viewBox.baseVal;
+    if (bounds.x >= view.x && bounds.y >= view.y &&
+        bounds.x + bounds.width <= view.x + view.width &&
+        bounds.y + bounds.height <= view.y + view.height) return;
+
+    while (level > 0 && (bounds.width > width / scales[level] || bounds.height > height / scales[level])) {
+      level--;
+    }
+    centerX = bounds.x + bounds.width / 2;
+    centerY = bounds.y + bounds.height / 2;
+    render();
+  }
+
+  return { resetView, showDistrict };
 }
