@@ -1,0 +1,47 @@
+.russia-intro h1 { font-size: clamp(2.25rem, 4.7vw, 3.9rem); }
+.russia-quiz .mode { margin-bottom: 20px; }
+.mode label { display: block; color: var(--muted); font-size: .875rem; font-weight: 650; margin-bottom: 6px; }
+.mode select { appearance: none; width: 100%; background: #f4f5ef; color: var(--ink); border: 1px solid #cbd6ca; border-radius: 7px; padding: 9px 29px 9px 10px; font: inherit; font-size: .925rem; min-height: 40px; }
+.mode { position: relative; }
+.mode::after { content: ""; position: absolute; top: 40px; right: 14px; width: 7px; height: 7px; border: solid var(--muted); border-width: 0 2px 2px 0; transform: rotate(45deg); pointer-events: none; }
+.mode-note { font-size: .87rem; color: var(--muted); line-height: 1.35; margin: 8px 0 0; }
+.russia-quiz h2 { font-size: clamp(1.6rem, 2.5vw, 2.3rem); }
+.russia-quiz .feedback { min-height: 4.3em; margin-bottom: 11px; }
+.next, .review { min-height: 42px; width: 100%; border: 0; border-radius: 7px; background: #2c5946; color: white; padding: 8px 11px; font-size: .92rem; font-weight: 650; margin-bottom: 16px; }
+.next:hover:enabled, .review:hover { background: #254937; }
+.next:disabled { background: #dce6da; color: #526359; opacity: 1; }
+.russia-quiz .mistakes { margin-bottom: 15px; }
+.russia-frame { background: #dcecf0; background-image: none; }
+#russia-map { display: block; width: 100%; height: auto; }
+.graticule { fill: none; stroke: #b7d1d6; stroke-width: 1; }
+.russia-land { fill: #e8ecd9; }
+.coastline { fill: none; stroke: #7f9b89; stroke-width: .8; }
+.country-line { fill: none; stroke: #91a28e; stroke-width: .65; }
+.russia-area { cursor: pointer; fill: transparent; stroke: transparent; stroke-width: 2; }
+.russia-area:focus-visible { fill: #638e8125; stroke: #426455; outline: none; }
+.russia-area.right { fill: #4a9a69ad; stroke: #275d3d; }
+.russia-area.wrong { fill: #d87568a8; stroke: #963b31; }
+.russia-marker { cursor: pointer; }
+.marker-hit { fill: transparent; }
+.marker-dot { fill: #fffefa; stroke: #264b41; stroke-width: 3; pointer-events: none; }
+.russia-marker:hover .marker-dot, .russia-marker:focus-visible .marker-dot { fill: #b8d7c7; stroke-width: 4; }
+.russia-marker:focus-visible { outline: none; }
+.russia-marker.right .marker-dot { fill: #5baf78; stroke: #245f3d; }
+.russia-marker.wrong .marker-dot, .miss-dot { fill: #da796b; stroke: #943b2e; }
+.miss-dot { stroke-width: 2.5; pointer-events: none; }
+.map-locked .russia-area, .map-locked .russia-marker { cursor: default; }
+.map-locked .russia-area:not(.right, .wrong) { stroke: transparent; fill: transparent; }
+.map-locked .russia-marker:not(.right, .wrong) .marker-dot { fill: #fffefa; stroke-width: 3; opacity: .6; }
+#russia-target:focus { outline: none; }
+@media (max-width: 740px) {
+  .russia-workspace { display: flex; flex-direction: column; }
+  .russia-workspace > * { width: 100%; }
+  .russia-quiz { position: static; display: grid; grid-template-columns: 1fr 104px; gap: 8px 13px; }
+  .russia-quiz .mode { grid-column: 1 / -1; margin: 0; }
+  .russia-quiz .question { grid-row: auto; }
+  .russia-quiz h2 { min-height: 0; font-size: clamp(1.3rem, 5.7vw, 1.85rem); }
+  .russia-quiz .feedback { grid-row: auto; min-height: 0; margin: 0; }
+  .russia-quiz .results { grid-row: 2 / 4; }
+  .russia-quiz .next, .russia-quiz .review, .russia-quiz .restart { grid-column: 1 / -1; margin: 0; }
+  .russia-quiz .next:disabled { display: none; }
+}

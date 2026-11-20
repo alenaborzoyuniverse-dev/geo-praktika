@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Тренажёр по географическому положению России. Найдите на карте моря, острова, проливы, крайние точки и соседние страны.">
+  <title>Географическое положение России · Геопрактика</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="russia.css">
+  <script defer src="russia-topics.js"></script>
+  <script defer src="russia-data.js"></script>
+  <script defer src="russia-map.js"></script>
+  <script defer src="russia-quiz.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span>Геопрактика</div>
+      <nav class="exercise-nav" aria-label="Тренажёры">
+        <a href="index.html">Омская область</a>
+        <a href="russia.html" aria-current="page">Россия</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div class="intro russia-intro">
+      <h1>Географическое положение России</h1>
+      <p class="description">Найдите на карте объекты из обязательного перечня.</p>
+    </div>
+    <div class="workspace russia-workspace">
+      <section class="quiz russia-quiz" aria-labelledby="russia-target">
+        <div class="mode">
+          <label for="topic">Тема раунда</label>
+          <select id="topic"></select>
+          <p id="mode-note" class="mode-note" hidden></p>
+        </div>
+        <div class="question" aria-live="polite" aria-atomic="true">
+          <p id="russia-prompt" class="prompt">Покажите на карте</p>
+          <h2 id="russia-target" tabindex="-1">Загрузка карты…</h2>
+        </div>
+        <p id="russia-feedback" role="status" class="feedback"></p>
+        <button type="button" class="next" id="next" disabled>Следующий объект</button>
+        <div class="results">
+          <div class="result-head">
+            <label for="russia-progress">Найдено</label>
+            <span class="count" id="russia-count"></span>
+          </div>
+          <progress id="russia-progress" value="0" max="1"></progress>
+          <p class="mistakes">Ошибки <strong id="russia-mistakes">0</strong></p>
+        </div>
+        <button type="button" id="review" class="review" hidden>Повторить ошибки</button>
+        <button type="button" id="russia-restart" class="restart">Начать заново</button>
+      </section>
+      <figure class="map-panel russia-map-panel">
+        <div class="map-top">
+          <figcaption id="map-caption">Контурная карта</figcaption>
+          <div class="legend"><span><i class="swatch correct"></i> Верно</span><span><i class="swatch incorrect"></i> Ошибка</span></div>
+        </div>
+        <div class="map-frame russia-frame">
+          <svg id="russia-map" viewBox="0 0 760 460" aria-label="Карта для ответа" role="group"></svg>
+        </div>
+        <div class="map-bottom"><span id="map-scale"></span><a href="https://www.naturalearthdata.com/">Контуры Natural Earth</a></div>
+      </figure>
+    </div>
+  </main>
+  <noscript><p class="no-script">Для работы тренажёра включите JavaScript в браузере.</p></noscript>
+</body>
+</html>
