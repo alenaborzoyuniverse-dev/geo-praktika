@@ -9,7 +9,9 @@
   <link rel="stylesheet" href="russia.css">
   <script defer src="russia-topics.js"></script>
   <script defer src="russia-data.js"></script>
+  <script defer src="russia-region-data.js"></script>
   <script defer src="russia-map.js"></script>
+  <script defer src="russia-region-map.js"></script>
   <script defer src="russia-quiz.js"></script>
 </head>
 <body>
@@ -24,7 +26,7 @@
   </header>
   <main>
     <div class="intro russia-intro">
-      <h1>Географическое положение России</h1>
+      <h1 id="russia-heading">Географическое положение России</h1>
       <p class="description">Найдите на карте объекты из обязательного перечня.</p>
     </div>
     <div class="workspace russia-workspace">
@@ -32,6 +34,10 @@
         <div class="mode">
           <label for="topic">Тема раунда</label>
           <select id="topic"></select>
+          <div id="region-field" hidden>
+            <label for="region">Регион</label>
+            <select id="region"></select>
+          </div>
           <p id="mode-note" class="mode-note" hidden></p>
         </div>
         <div class="question" aria-live="polite" aria-atomic="true">

@@ -48,7 +48,7 @@ function fitMap([west, south, east, north]) {
     return [mapWidth / 2 + (lon - middleLon) * longitudeScale, mapHeight / 2 - (lat - middleLat) * scale];
   }
 
-  function path(polygons, outline = false) {
+  function path(polygons, outline = false, closed = true) {
     const [left, bottom, right, top] = viewport;
     const segments = [];
     for (const [w, s, e, n, rings] of polygons) {
@@ -78,7 +78,7 @@ function fitMap([west, south, east, north]) {
               }
             }
           } else {
-            segments.push("M" + coordinates.join(" ") + "Z");
+            segments.push("M" + coordinates.join(" ") + (closed ? "Z" : ""));
           }
         }
       }
@@ -156,31 +156,9 @@ function areaCamera(question) {
 function drawRussiaMap(svg, question, answer) {
   const useMarkers = question && !question.country && !question.shape;
   const { camera, markers } = useMarkers ? markerChoices(question) : { camera: areaCamera(question), markers: [] };
-  svg.replaceChildren(makeGrid(camera));
-  svg.classList.remove("map-locked");
-  const land = svgNode("path", { class: "russia-land", d: camera.path(russiaData.land), "fill-rule": "evenodd" });
-  const coast = svgNode("path", { class: "coastline", d: camera.path(russiaData.land, true) });
-  svg.append(land, coast);
+  drawMapBackground(svg, camera);
 
-  let rightNode;
-  const buttons = [];
-  function addChoice(node, right, label) {
-    node.setAttribute("tabindex", "0");
-    node.setAttribute("role", "button");
-    node.setAttribute("aria-label", label);
-    node.addEventListener("click", event => {
-      event.stopPropagation();
-      answer(right, node);
-    });
-    node.addEventListener("keydown", event => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-      event.preventDefault();
-      if (!event.repeat) answer(right, node);
-    });
-    svg.append(node);
-    if (right) rightNode = node;
-    buttons.push(node);
-  }
+  const { addChoice, reveal } = mapChoices(svg, question, answer);
 
   function addArea(path, right, label) {
     if (!path) return;
@@ -203,24 +181,53 @@ function drawRussiaMap(svg, question, answer) {
       addArea(camera.path(polygons), name === question.shape, `Участок карты ${index + 1}`);
     });
   } else if (useMarkers) {
-    markers.forEach(({ item, position: [x, y] }, index) => {
-      const marker = svgNode("g", { class: "russia-marker", transform: `translate(${x} ${y})` });
-      marker.append(
-        svgNode("circle", { class: "marker-hit", r: 30 }),
-        svgNode("circle", { class: "marker-dot", r: 10 }),
-      );
-      addChoice(marker, item === question, `Точка ${index + 1}`);
+    markers.forEach(({ item, position }, index) => {
+      addChoice(mapMarker(position), item === question, `Точка ${index + 1}`);
     });
   }
 
-  svg.onclick = question && !useMarkers ? event => {
-    const point = new DOMPoint(event.clientX, event.clientY).matrixTransform(svg.getScreenCTM().inverse());
-    const miss = svgNode("circle", { class: "miss-dot", cx: point.x, cy: point.y, r: 9 });
-    if (answer(false, miss)) svg.append(miss);
-  } : null;
+  svg.onclick = question && !useMarkers ? event => markMapMiss(svg, answer, mapPointFromEvent(svg, event)) : null;
 
   return {
     scale: useMarkers ? "Маркеры на увеличенной карте" : question?.country === "RUS" ? "Обзорная карта" : "Контурная карта региона",
+    reveal,
+  };
+}
+
+function drawMapBackground(svg, camera) {
+  svg.replaceChildren(makeGrid(camera));
+  svg.classList.remove("map-locked");
+  svg.classList.remove("regional-map");
+  svg.onclick = null;
+  const land = svgNode("path", { class: "russia-land", d: camera.path(russiaData.land), "fill-rule": "evenodd" });
+  const coast = svgNode("path", { class: "coastline", d: camera.path(russiaData.land, true) });
+  svg.append(land, coast);
+}
+
+function mapChoices(svg, question, answer) {
+  let rightNode;
+  const buttons = [];
+  function addChoice(node, right, label, delegatePointer = false) {
+    node.setAttribute("tabindex", "0");
+    node.setAttribute("role", "button");
+    node.setAttribute("aria-label", label);
+    node.addEventListener("click", event => {
+      if (delegatePointer && event.detail > 0) return;
+      event.stopPropagation();
+      answer(right, node);
+    });
+    node.addEventListener("keydown", event => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      if (!event.repeat) answer(right, node);
+    });
+    svg.append(node);
+    if (right) rightNode = node;
+    buttons.push(node);
+  }
+
+  return {
+    addChoice,
     reveal(wrongNode) {
       if (wrongNode) wrongNode.classList.add("wrong");
       if (rightNode) {
@@ -235,4 +242,22 @@ function drawRussiaMap(svg, question, answer) {
       }
     },
   };
+}
+
+function mapMarker([x, y], radius = 30) {
+  const marker = svgNode("g", { class: "russia-marker", transform: `translate(${x} ${y})` });
+  marker.append(
+    svgNode("circle", { class: "marker-hit", r: radius }),
+    svgNode("circle", { class: "marker-dot", r: 10 }),
+  );
+  return marker;
+}
+
+function mapPointFromEvent(svg, event) {
+  return new DOMPoint(event.clientX, event.clientY).matrixTransform(svg.getScreenCTM().inverse());
+}
+
+function markMapMiss(svg, answer, point) {
+  const miss = svgNode("circle", { class: "miss-dot", cx: point.x, cy: point.y, r: 9 });
+  if (answer(false, miss)) svg.append(miss);
 }

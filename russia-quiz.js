@@ -1,8 +1,11 @@
 "use strict";
 
 const russiaMap = document.querySelector("#russia-map");
+const russiaHeading = document.querySelector("#russia-heading");
 const topicSelect = document.querySelector("#topic");
 const modeNote = document.querySelector("#mode-note");
+const regionField = document.querySelector("#region-field");
+const regionSelect = document.querySelector("#region");
 const russiaPrompt = document.querySelector("#russia-prompt");
 const russiaTarget = document.querySelector("#russia-target");
 const russiaFeedback = document.querySelector("#russia-feedback");
@@ -16,10 +19,13 @@ const russiaRestart = document.querySelector("#russia-restart");
 
 const modes = [
   ["mixed", "Смешанный раунд"],
+  ["regional", "Смешанный раунд по региону"],
+  ["region-all", "Все объекты региона"],
   ["all", "Весь перечень"],
   ...topics,
 ];
 const topicLabels = new Map(topics);
+const regionsById = new Map(regionalGeography.map(region => [region.id, region]));
 let round;
 let activeMap;
 
@@ -33,6 +39,8 @@ function shuffled(items) {
 }
 
 function exercisesFor(mode) {
+  if (mode === "regional") return regionalExercises(regionsById.get(regionSelect.value));
+  if (mode === "region-all") return regionsById.get(regionSelect.value).questions;
   if (mode === "all") return allQuestions;
   if (mode !== "mixed") return byTopic.get(mode);
 
@@ -47,7 +55,10 @@ function exercisesFor(mode) {
 }
 
 function startRussiaRound(items = exercisesFor(topicSelect.value), isReview = false) {
+  const mode = topicSelect.value;
+  const region = mode === "regional" || mode === "region-all" ? regionsById.get(regionSelect.value) : null;
   round = {
+    region,
     total: items.length,
     queue: shuffled(items),
     solved: 0,
@@ -57,13 +68,16 @@ function startRussiaRound(items = exercisesFor(topicSelect.value), isReview = fa
   };
   if (isReview) {
     modeNote.textContent = "Повторение объектов, в которых были ошибки.";
-  } else if (topicSelect.value === "mixed") {
+  } else if (mode === "mixed") {
     modeNote.textContent = "По два объекта из каждой темы.";
-  } else if (topicSelect.value === "cisList") {
+  } else if (mode === "cisList") {
     modeNote.textContent = "Расположение стран из раздела «СНГ» в учебном листе.";
   } else {
     modeNote.textContent = "";
   }
+  regionField.hidden = !region;
+  russiaHeading.textContent = region ? "Природные объекты России" : "Географическое положение России";
+  document.title = russiaHeading.textContent + " · Геопрактика";
   modeNote.hidden = !modeNote.textContent;
   russiaProgress.max = round.total;
   showRussiaQuestion();
@@ -81,15 +95,18 @@ function showRussiaQuestion() {
   nextButton.hidden = false;
   reviewButton.hidden = true;
   round.answered = false;
-  russiaPrompt.textContent = topicLabels.get(question.topic);
+  const kind = round.region ? regionKinds[question.type] : null;
+  russiaPrompt.textContent = kind ? kind.label : topicLabels.get(question.topic);
   russiaTarget.textContent = question.name;
   russiaFeedback.dataset.tone = "";
-  russiaFeedback.textContent = question.country
+  russiaFeedback.textContent = kind?.hint ?? (question.country
     ? "Нажмите на территорию страны."
     : question.shape
       ? "Нажмите на нужный объект на карте."
-      : "Выберите одну из точек на карте.";
-  activeMap = drawRussiaMap(russiaMap, question, answerRussiaQuestion);
+      : "Выберите одну из точек на карте.");
+  activeMap = round.region
+    ? drawRegionalMap(russiaMap, round.region, question, answerRussiaQuestion)
+    : drawRussiaMap(russiaMap, question, answerRussiaQuestion);
   mapScale.textContent = activeMap.scale;
   updateRussiaProgress();
 }
@@ -128,7 +145,15 @@ function answerRussiaQuestion(correct, choice) {
 }
 
 for (const [id, label] of modes) topicSelect.add(new Option(label, id));
+for (const region of regionalGeography) regionSelect.add(new Option(region.name, region.id));
+const initialMode = new URLSearchParams(window.location.search);
+const modeFromUrl = initialMode.get("mode");
+const regionFromUrl = initialMode.get("region");
+if (modes.some(([id]) => id === modeFromUrl)) topicSelect.value = modeFromUrl;
+if (regionsById.has(regionFromUrl)) regionSelect.value = regionFromUrl;
+else regionSelect.value = "far-east";
 topicSelect.addEventListener("change", () => startRussiaRound());
+regionSelect.addEventListener("change", () => startRussiaRound());
 russiaRestart.addEventListener("click", () => startRussiaRound());
 reviewButton.addEventListener("click", () => startRussiaRound([...round.missed], true));
 nextButton.addEventListener("click", event => {
