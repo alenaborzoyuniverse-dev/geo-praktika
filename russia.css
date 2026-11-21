@@ -117,6 +117,7 @@
 .admin-controls button:focus-visible { outline-offset: 1px; }
 .admin-quiz h2 { font-size: clamp(1.5rem, 2.5vw, 2.3rem); }
 .admin-quiz .feedback { margin: 12px 0 16px; min-height: 2.65em; }
+.admin-quiz .next { grid-column: 1 / -1; }
 @media (max-width: 740px) {
   .admin-quiz h2 { min-height: 0; font-size: clamp(1.25rem,5.5vw,1.85rem); }
   .admin-quiz .feedback { margin: 8px 0 0; }

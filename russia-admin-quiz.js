@@ -10,6 +10,7 @@ function activateRussiaAdminQuiz() {
   const feedback = get("feedback");
   const progress = get("progress");
   const restart = get("restart");
+  const next = get("next");
   if (typeof russiaAdminData === "undefined") {
     target.textContent = "Карта не загрузилась";
     feedback.textContent = "Обновите страницу, чтобы попробовать снова.";
@@ -24,6 +25,9 @@ function activateRussiaAdminQuiz() {
   const fullWidth = 900;
   const fullHeight = 500;
   const minWidth = 140;
+  const roundSize = progress.max;
+  let remaining = shuffled(regions);
+  let round = [];
   let queue = [];
   let mistakes = 0;
   let timer = null;
@@ -37,10 +41,11 @@ function activateRussiaAdminQuiz() {
 
   function showQuestion() {
     prompt.textContent = queue.length ? "Покажите на карте" : "Задание выполнено";
-    target.textContent = queue[0]?.name || "Все регионы найдены!";
-    get("count").textContent = found.size + " / " + regions.length;
+    target.textContent = queue[0]?.name || "Раунд завершён!";
+    get("count").textContent = found.size + " / " + round.length;
     get("mistakes").textContent = mistakes;
     progress.value = found.size;
+    next.hidden = queue.length > 0;
   }
 
   function answer(region) {
@@ -52,7 +57,7 @@ function activateRussiaAdminQuiz() {
       clicked.classList.add("found");
       clicked.setAttribute("aria-label", region.name + ", найден");
       showQuestion();
-      setFeedback(queue.length ? "Верно! Найдите следующий регион." : "Все регионы отмечены зелёным.", "right");
+      setFeedback(queue.length ? "Верно! Найдите следующий регион." : "Все регионы раунда найдены.", "right");
       return;
     }
 
@@ -173,7 +178,7 @@ function activateRussiaAdminQuiz() {
     timer = null;
     found.clear();
     mistakes = 0;
-    queue = shuffled(regions);
+    queue = shuffled(round);
     for (const [index, button] of [...shapes.values()].entries()) {
       button.classList.remove("found", "missed", "revealed");
       button.setAttribute("aria-label", "Участок карты " + (index + 1));
@@ -183,8 +188,21 @@ function activateRussiaAdminQuiz() {
     showQuestion();
   }
 
-  progress.max = regions.length;
+  function advanceRound() {
+    round = remaining.splice(0, roundSize);
+    if (round.length < roundSize) {
+      // Finish the current pass through all regions before reshuffling.
+      remaining = shuffled(regions.filter(region => !round.includes(region)));
+      round.push(...remaining.splice(0, roundSize - round.length));
+    }
+    start();
+  }
+
   restart.disabled = false;
   restart.addEventListener("click", start);
-  start();
+  next.addEventListener("click", () => {
+    advanceRound();
+    target.focus({ preventScroll: true });
+  });
+  advanceRound();
 }

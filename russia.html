@@ -18,7 +18,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <title>Географическое положение России · Геопрактика</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="russia.css?v=admin-regions">
+  <link rel="stylesheet" href="russia.css?v=admin-rounds">
   <script defer src="russia-topics.js"></script>
   <script defer src="russia-data.js"></script>
   <script defer src="russia-region-data.js"></script>
@@ -26,7 +26,7 @@
   <script defer src="russia-region-map.js"></script>
   <script defer src="russia-quiz.js"></script>
   <script defer src="russia-admin-data.js"></script>
-  <script defer src="russia-admin-quiz.js"></script>
+  <script defer src="russia-admin-quiz.js?v=rounds-20"></script>
   <script defer src="russia-identify.js?v=admin-regions"></script>
 </head>
 <body>
@@ -119,7 +119,7 @@
       <section class="quiz admin-quiz" aria-labelledby="admin-target">
         <div class="question" aria-live="polite" aria-atomic="true">
           <p id="admin-prompt" class="prompt">Покажите на карте</p>
-          <h2 id="admin-target">Загрузка карты…</h2>
+          <h2 id="admin-target" tabindex="-1">Загрузка карты…</h2>
         </div>
         <p id="admin-feedback" class="feedback" role="status"></p>
         <div class="results">
@@ -127,10 +127,11 @@
             <label for="admin-progress">Найдено</label>
             <span class="count" id="admin-count"></span>
           </div>
-          <progress id="admin-progress" value="0" max="83"></progress>
+          <progress id="admin-progress" value="0" max="20"></progress>
           <p class="mistakes">Ошибки <strong id="admin-mistakes">0</strong></p>
         </div>
-        <button type="button" class="restart" id="admin-restart" disabled>Начать заново</button>
+        <button type="button" class="next" id="admin-next" hidden>Следующий раунд</button>
+        <button type="button" class="restart" id="admin-restart" disabled>Начать раунд заново</button>
       </section>
       <figure class="map-panel">
         <div class="map-top">
