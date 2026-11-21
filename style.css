@@ -108,3 +108,29 @@ progress::-moz-progress-bar { background: var(--green); }
   .brand { gap: 6px; font-size: 1rem; }
   .exercise-nav { gap: 2px; }
 }
+
+.omsk-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.omsk-tabs button { min-height: 44px; padding: 8px 14px; border: 1px solid #bdc9bd; border-radius: 8px; background: var(--white); font-weight: 650; }
+.omsk-tabs button[aria-selected="true"], .omsk-continue { background: #2c5946; border-color: #2c5946; color: white; }
+.omsk-tabs button[aria-selected="false"]:hover { background: #edf1e9; }
+.omsk-tabs[hidden], #omsk-find[hidden], #omsk-identify[hidden] { display: none; }
+.omsk-identify h2 { min-height: 0; margin: 16px 0 12px; font-size: clamp(1.35rem, 2.6vw, 1.8rem); }
+#omsk-identify-options { display: grid; gap: 6px; }
+#omsk-identify-options button { min-width: 0; min-height: 44px; padding: 6px 10px; border: 1px solid #bdc9bd; border-radius: 7px; background: var(--white); text-align: left; overflow-wrap: anywhere; font-size: .92rem; }
+#omsk-identify-options button:not([aria-disabled="true"]):hover { background: #edf1e9; }
+#omsk-identify-options button[aria-disabled="true"] { cursor: default; }
+#omsk-identify-options [data-result="right"] { color: #275d3d; background: #e4f2e6; border-color: #39734f; font-weight: 650; }
+#omsk-identify-options [data-result="wrong"] { color: #943b2e; background: #f8e5e0; border-color: #ba4f40; }
+.omsk-identify .feedback { min-height: 0; margin: 10px 0; }
+.omsk-identify .feedback:empty { display: none; }
+.omsk-continue { width: 100%; min-height: 44px; border: 0; border-radius: 7px; font-weight: 650; }
+.omsk-continue:hover { background: #254937; }
+#omsk-workspace:has(.omsk-map-identify) .legend { display: none; }
+.omsk-map-identify .district { pointer-events: none; fill: #d4e2d0; stroke: #678071; stroke-width: 1.05; }
+.omsk-map-identify .district.identify-target { fill: #e3a28f; stroke: #943b2e; stroke-width: 2.6; }
+@media (max-width: 740px) {
+  .omsk-identify { display: block; position: static; }
+  #omsk-workspace:has(.omsk-map-identify) .map-panel { grid-row: 1; }
+  #omsk-workspace #map.omsk-map-identify { height: clamp(300px, 52svh, 460px); }
+  #omsk-identify-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

@@ -7,6 +7,7 @@
   <title>Районы Омской области · Геопрактика</title>
   <link rel="stylesheet" href="style.css">
   <script defer src="districts.js"></script>
+  <script defer src="omsk-identify.js"></script>
   <script defer src="quiz.js"></script>
 </head>
 <body>
@@ -23,10 +24,14 @@
     <div class="intro">
       <p class="category"><span></span> Омская область</p>
       <h1>Районы на карте</h1>
-      <p class="description">Найдите все 32 района Омской области.</p>
+      <p class="description">Найдите районы Омской области или узнайте их по расположению.</p>
     </div>
-    <div class="workspace">
-      <section class="quiz" aria-labelledby="target">
+    <div id="omsk-tabs" class="omsk-tabs" role="tablist" aria-label="Режим тренировки" hidden>
+      <button type="button" id="omsk-find-tab" role="tab" aria-controls="omsk-find" aria-selected="true">Найди на карте</button>
+      <button type="button" id="omsk-identify-tab" role="tab" aria-controls="omsk-identify" aria-selected="false" tabindex="-1">Угадай район</button>
+    </div>
+    <div class="workspace" id="omsk-workspace">
+      <section class="quiz" id="omsk-find" role="tabpanel" aria-labelledby="omsk-find-tab">
         <div class="question" aria-live="polite" aria-atomic="true">
           <p id="prompt" class="prompt">Покажите на карте</p>
           <h2 id="target">Загрузка карты…</h2>
@@ -41,6 +46,24 @@
           <p class="mistakes">Ошибки <strong id="mistakes">0</strong></p>
         </div>
         <button id="restart" class="restart" type="button" disabled><span aria-hidden="true">↻</span> Начать заново</button>
+      </section>
+      <section class="quiz omsk-identify" id="omsk-identify" role="tabpanel" aria-labelledby="omsk-identify-tab" hidden>
+        <div id="omsk-identify-round">
+          <div class="result-head">
+            <label for="omsk-identify-progress">Пройдено</label>
+            <span class="count" id="omsk-identify-count"></span>
+          </div>
+          <progress id="omsk-identify-progress" value="0" max="20"></progress>
+          <h2 id="omsk-identify-question" tabindex="-1">Какой район выделен на карте?</h2>
+          <div id="omsk-identify-options" role="group" aria-label="Варианты ответа"></div>
+          <p id="omsk-identify-feedback" class="feedback" role="status"></p>
+          <button type="button" class="omsk-continue" id="omsk-identify-next" hidden>Следующий вопрос</button>
+        </div>
+        <div id="omsk-identify-result" hidden>
+          <h2 id="omsk-identify-result-title" tabindex="-1">Раунд завершён</h2>
+          <p id="omsk-identify-score"></p>
+          <button type="button" class="restart" id="omsk-identify-replay">Сыграть ещё раз</button>
+        </div>
       </section>
       <figure class="map-panel">
         <div class="map-top">

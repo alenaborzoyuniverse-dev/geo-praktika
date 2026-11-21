@@ -42,7 +42,7 @@ function initialize(data) {
   }
 
   function answer(district) {
-    if (!queue.length || errorTimer !== null) return;
+    if (map.classList.contains("omsk-map-identify") || !queue.length || errorTimer !== null) return;
 
     const next = queue.shift();
     const path = paths.get(district);
@@ -66,7 +66,7 @@ function initialize(data) {
     errorTimer = window.setTimeout(() => {
       path.classList.remove("missed");
       const correctPath = paths.get(next);
-      showDistrict(correctPath);
+      if (!map.classList.contains("omsk-map-identify")) showDistrict(correctPath);
       correctPath.classList.add("revealed");
       setFeedback("Правильный район подсвечен.", "right");
       errorTimer = window.setTimeout(() => {
@@ -131,6 +131,7 @@ function initialize(data) {
   restart.disabled = false;
   restart.addEventListener("click", start);
   start();
+  initializeOmskIdentify(data.districts, paths, map, showDistrict);
 }
 
 function enableZoom([left, top, width, height]) {
