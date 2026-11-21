@@ -64,3 +64,30 @@
   .russia-quiz .next, .russia-quiz .review, .russia-quiz .restart { grid-column: 1 / -1; margin: 0; }
   .russia-quiz .next:disabled { display: none; }
 }
+
+.russia-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.russia-tabs button { min-height: 44px; padding: 8px 14px; border: 1px solid #bdc9bd; border-radius: 8px; background: var(--white); font-weight: 650; }
+.russia-tabs button[aria-selected="true"] { background: #2c5946; border-color: #2c5946; color: white; }
+.russia-tabs button[aria-selected="false"]:hover { background: #edf1e9; }
+.russia-tabs[hidden], #find-panel[hidden], #identify-round[hidden] { display: none; }
+#identify-map { display: block; width: 100%; height: auto; }
+.identify-quiz h2 { margin: 18px 0 12px; font-size: clamp(1.35rem, 2.6vw, 1.8rem); }
+#identify-options { display: grid; gap: 6px; }
+#identify-options button { min-width: 0; min-height: 44px; padding: 6px 10px; border: 1px solid #bdc9bd; border-radius: 7px; background: var(--white); text-align: left; overflow-wrap: anywhere; font-size: .92rem; }
+#identify-options button:not([aria-disabled="true"]):hover { background: #edf1e9; }
+#identify-options button[aria-disabled="true"] { cursor: default; }
+#identify-options button[data-result="right"] { color: #275d3d; background: #e4f2e6; border-color: #39734f; font-weight: 650; }
+#identify-options button[data-result="wrong"] { color: #943b2e; background: #f8e5e0; border-color: #ba4f40; }
+.identify-quiz .feedback { min-height: 0; margin: 10px 0; }
+.identify-quiz .feedback:empty { display: none; }
+.identify-quiz .next { margin: 0; }
+.identify-result { max-width: 460px; margin-bottom: 26px; }
+.identify-mark { fill: #c9685555; stroke: #a44031; stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.identify-mark.is-river { fill: none; stroke-width: 3; stroke-linecap: round; }
+.identify-pin-halo { fill: #fff1e6; stroke: #a44031; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.identify-pin-dot { fill: #a44031; }
+@media (max-width: 740px) {
+  #identify-round { gap: 10px; }
+  #identify-round .map-panel { order: -1; }
+  #identify-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
