@@ -79,7 +79,7 @@ function initializeOmskIdentify(districts, paths, svg, showDistrict) {
     options.replaceChildren(...choices.map(district => {
       const button = document.createElement("button");
       button.type = "button";
-      button.textContent = district.name;
+      button.textContent = district.name.replace(/ район$/u, "");
       button.addEventListener("click", () => {
         if (answered) return;
         answered = true;
@@ -90,10 +90,10 @@ function initializeOmskIdentify(districts, paths, svg, showDistrict) {
         for (const option of options.children) option.setAttribute("aria-disabled", "true");
         const solution = options.children[choices.indexOf(target)];
         solution.dataset.result = "right";
-        solution.setAttribute("aria-label", target.name + ", правильный ответ");
+        solution.setAttribute("aria-label", solution.textContent + ", правильный ответ");
         if (!correct) {
           button.dataset.result = "wrong";
-          button.setAttribute("aria-label", district.name + ", ваш ответ, неверно");
+          button.setAttribute("aria-label", button.textContent + ", ваш ответ, неверно");
         }
         feedback.dataset.tone = correct ? "right" : "wrong";
         feedback.textContent = correct ? "Верно!" : "Правильный ответ — " + target.name + ".";
