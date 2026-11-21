@@ -117,6 +117,7 @@
 
   function showQuestion() {
     const target = round[position];
+    svg.classList.remove("identify-correct");
     answered = false;
     get("identify-count").textContent = "Вопрос " + (position + 1) + " из " + roundLength;
     get("identify-progress").value = position;
@@ -134,6 +135,7 @@
         if (answered) return;
         answered = true;
         const correct = q === target;
+        svg.classList.toggle("identify-correct", correct);
         score += Number(correct);
         get("identify-progress").value = position + 1;
         for (const option of options.children) option.setAttribute("aria-disabled", "true");
