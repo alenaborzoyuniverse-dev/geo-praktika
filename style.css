@@ -127,7 +127,7 @@ progress::-moz-progress-bar { background: var(--green); }
 .omsk-continue:hover { background: #254937; }
 #omsk-workspace:has(.omsk-map-identify) .legend { display: none; }
 .omsk-map-identify .district { pointer-events: none; fill: #d4e2d0; stroke: #678071; stroke-width: 1.05; }
-.omsk-map-identify .district.identify-target { fill: #e3a28f; stroke: #943b2e; stroke-width: 2.6; }
+.omsk-map-identify .district.identify-target { fill: #92bfd8; stroke: #28566e; stroke-width: 2.6; }
 .omsk-map-identify.omsk-identify-correct .district.identify-target { fill: #78ad81; stroke: #255e40; }
 @media (max-width: 740px) {
   .omsk-identify { display: block; position: static; }
