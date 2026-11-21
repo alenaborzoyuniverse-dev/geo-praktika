@@ -69,7 +69,7 @@
 .russia-tabs button { min-height: 44px; padding: 8px 14px; border: 1px solid #bdc9bd; border-radius: 8px; background: var(--white); font-weight: 650; }
 .russia-tabs button[aria-selected="true"] { background: #2c5946; border-color: #2c5946; color: white; }
 .russia-tabs button[aria-selected="false"]:hover { background: #edf1e9; }
-.russia-tabs[hidden], #find-panel[hidden], #identify-round[hidden] { display: none; }
+.russia-tabs[hidden], #find-panel[hidden], #identify-round[hidden], .identify-result[hidden] { display: none; }
 #identify-map {
   display: block;
   width: 100%;
@@ -101,5 +101,8 @@
 @media (max-width: 740px) {
   #identify-round { gap: 10px; }
   #identify-round .map-panel { order: -1; }
+  .identify-quiz, .identify-result { display: block; position: static; }
+  .identify-quiz h2, .identify-result h2 { min-height: 0; }
+  .identify-quiz .result-head { flex-flow: row wrap; gap: 4px 12px; }
   #identify-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
