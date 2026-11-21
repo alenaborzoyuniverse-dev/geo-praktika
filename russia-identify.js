@@ -3,13 +3,13 @@
 (() => {
   const roundLength = 20;
   const tabs = [...document.querySelectorAll(".russia-tabs [role=tab]")];
-  const [findTab, identifyTab] = tabs;
+  const [findTab, identifyTab, adminTab] = tabs;
   const get = id => document.getElementById(id);
   const options = get("identify-options");
   const feedback = get("identify-feedback");
   const next = get("identify-next");
   const svg = get("identify-map");
-  const deepLink = "#identify";
+  const tabHashes = ["", "#identify", "#regions"];
   let round = [];
   let position = 0;
   let score = 0;
@@ -188,18 +188,22 @@
       get(tab.getAttribute("aria-controls")).hidden = !selected;
     }
     if (active === identifyTab && !round.length) startRound();
+    if (active === adminTab) activateRussiaAdminQuiz();
   }
 
-  for (const tab of tabs) {
+  for (const [index, tab] of tabs.entries()) {
     tab.addEventListener("click", () => {
       const url = new URL(location.href);
-      url.hash = tab === identifyTab ? deepLink : "";
+      url.hash = tabHashes[index];
       if (url.href !== location.href) history.replaceState(null, "", url);
       selectTab(tab);
     });
     tab.addEventListener("keydown", event => {
-      const other = { ArrowLeft: tab === findTab ? identifyTab : findTab,
-        ArrowRight: tab === findTab ? identifyTab : findTab, Home: findTab, End: identifyTab }[event.key];
+      const other = {
+        ArrowLeft: tabs[(index + tabs.length - 1) % tabs.length],
+        ArrowRight: tabs[(index + 1) % tabs.length],
+        Home: findTab, End: adminTab
+      }[event.key];
       if (!other) return;
       event.preventDefault();
       other.click();
@@ -208,7 +212,7 @@
   }
 
   function selectFromLocation() {
-    selectTab(location.hash === deepLink ? identifyTab : findTab);
+    selectTab(tabs[tabHashes.indexOf(location.hash)] || findTab);
   }
   window.addEventListener("hashchange", selectFromLocation);
   findTab.parentElement.hidden = false;

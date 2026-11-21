@@ -18,14 +18,16 @@
   <meta name="twitter:card" content="summary_large_image">
   <title>Географическое положение России · Геопрактика</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="russia.css?v=identify-mobile">
+  <link rel="stylesheet" href="russia.css?v=admin-regions">
   <script defer src="russia-topics.js"></script>
   <script defer src="russia-data.js"></script>
   <script defer src="russia-region-data.js"></script>
   <script defer src="russia-map.js"></script>
   <script defer src="russia-region-map.js"></script>
   <script defer src="russia-quiz.js"></script>
-  <script defer src="russia-identify.js?v=identify-colors"></script>
+  <script defer src="russia-admin-data.js"></script>
+  <script defer src="russia-admin-quiz.js"></script>
+  <script defer src="russia-identify.js?v=admin-regions"></script>
 </head>
 <body>
   <header class="masthead">
@@ -45,6 +47,7 @@
     <div class="russia-tabs" role="tablist" aria-label="Режим тренировки" hidden>
       <button type="button" id="find-tab" role="tab" aria-controls="find-panel" aria-selected="true">Найди на карте</button>
       <button type="button" id="identify-tab" role="tab" aria-controls="identify-panel" aria-selected="false" tabindex="-1">Угадай объект</button>
+      <button type="button" id="admin-tab" role="tab" aria-controls="admin-panel" aria-selected="false" tabindex="-1">Регионы России</button>
     </div>
     <div id="find-panel" role="tabpanel" aria-labelledby="find-tab" class="workspace russia-workspace">
       <section class="quiz russia-quiz" aria-labelledby="russia-target">
@@ -111,6 +114,42 @@
         <p id="identify-score"></p>
         <button type="button" id="identify-replay" class="restart">Сыграть ещё раз</button>
       </section>
+    </div>
+    <div id="admin-panel" role="tabpanel" aria-labelledby="admin-tab" class="workspace russia-workspace" hidden>
+      <section class="quiz admin-quiz" aria-labelledby="admin-target">
+        <div class="question" aria-live="polite" aria-atomic="true">
+          <p id="admin-prompt" class="prompt">Покажите на карте</p>
+          <h2 id="admin-target">Загрузка карты…</h2>
+        </div>
+        <p id="admin-feedback" class="feedback" role="status"></p>
+        <div class="results">
+          <div class="result-head">
+            <label for="admin-progress">Найдено</label>
+            <span class="count" id="admin-count"></span>
+          </div>
+          <progress id="admin-progress" value="0" max="83"></progress>
+          <p class="mistakes">Ошибки <strong id="admin-mistakes">0</strong></p>
+        </div>
+        <button type="button" class="restart" id="admin-restart" disabled>Начать заново</button>
+      </section>
+      <figure class="map-panel">
+        <div class="map-top">
+          <figcaption>Карта регионов</figcaption>
+          <div class="admin-controls" aria-label="Масштаб карты" role="group">
+            <button type="button" id="admin-west" aria-label="Приблизить западную часть России">Запад</button>
+            <button type="button" id="admin-overview">Вся карта</button>
+            <button type="button" id="admin-zoom-out" aria-label="Отдалить">−</button>
+            <button type="button" id="admin-zoom-in" aria-label="Приблизить">+</button>
+          </div>
+        </div>
+        <div class="map-frame russia-frame">
+          <svg id="admin-map" viewBox="0 0 900 500" role="group" aria-label="Контурная карта регионов России"></svg>
+        </div>
+        <div class="map-bottom">
+          <span>Москва и Санкт-Петербург отмечены точками</span>
+          <a href="https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/">Границы Natural Earth</a>
+        </div>
+      </figure>
     </div>
   </main>
   <noscript><p class="no-script">Для работы тренажёра включите JavaScript в браузере.</p></noscript>
