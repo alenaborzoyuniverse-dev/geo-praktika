@@ -62,6 +62,7 @@ function initializeOmskIdentify(districts, paths, svg, showDistrict) {
 
   function showQuestion() {
     answered = false;
+    svg.classList.remove("omsk-identify-correct");
     svg.setAttribute("aria-label", "Карта Омской области с выделенным районом");
     const target = round[position];
     for (const [district, path] of paths) path.classList.toggle("identify-target", district === target);
@@ -83,6 +84,7 @@ function initializeOmskIdentify(districts, paths, svg, showDistrict) {
         if (answered) return;
         answered = true;
         const correct = district === target;
+        svg.classList.toggle("omsk-identify-correct", correct);
         score += Number(correct);
         control("progress").value = position + 1;
         for (const option of options.children) option.setAttribute("aria-disabled", "true");
@@ -116,6 +118,7 @@ function initializeOmskIdentify(districts, paths, svg, showDistrict) {
     } else {
       answered = false;
       paths.get(round.at(-1)).classList.remove("identify-target");
+      svg.classList.remove("omsk-identify-correct");
       svg.setAttribute("aria-label", "Карта районов Омской области");
       control("round").hidden = true;
       control("score").textContent = "Верных ответов: " + score + " из " + roundLength;
