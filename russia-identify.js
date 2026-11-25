@@ -46,7 +46,7 @@
     return shuffled([
       target,
       ...candidates.filter(q => q.category === target.category).slice(0, 2),
-      ...candidates.filter(q => q.category !== target.category).slice(0, 5)
+      ...candidates.filter(q => q.category !== target.category).slice(0, 3)
     ]);
   }
 
